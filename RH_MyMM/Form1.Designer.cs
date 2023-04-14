@@ -1,6 +1,6 @@
 ﻿namespace RH_MyMM
 {
-    partial class Form1
+    partial class myForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,10 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(myForm));
+            SuspendLayout();
+            // 
+            // myForm
+            // 
+            AutoScaleDimensions = new SizeF(10F, 18F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(906, 523);
+            Font = new Font("Verdana", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 4, 4, 4);
+            MaximumSize = new Size(922, 562);
+            MinimumSize = new Size(922, 562);
+            Name = "myForm";
+            Text = "Final Lab - Message Mapping";
+            ResumeLayout(false);
         }
 
         #endregion
