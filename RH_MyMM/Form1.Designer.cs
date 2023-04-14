@@ -117,6 +117,7 @@
             // 
             // submitfileBtn
             // 
+            submitfileBtn.Enabled = false;
             submitfileBtn.Location = new Point(203, 242);
             submitfileBtn.Name = "submitfileBtn";
             submitfileBtn.Size = new Size(75, 23);
@@ -150,11 +151,15 @@
             fileInputBox.PlaceholderText = "select your .txt file...";
             fileInputBox.Size = new Size(185, 27);
             fileInputBox.TabIndex = 10;
+            fileInputBox.Click += fileInputBox_Click;
             fileInputBox.TextChanged += fileInputBox_TextChanged;
+            fileInputBox.Enter += fileInputBox_Enter;
+            fileInputBox.Leave += fileInputBox_Leave;
             // 
             // openFileDialog1
             // 
             openFileDialog1.FileName = "openFileDialog1";
+            openFileDialog1.Filter = "Text Files (.txt)|.txt";
             openFileDialog1.FileOk += openFileDialog1_FileOk;
             // 
             // totWordsTxtBox
@@ -256,6 +261,7 @@
             exitBtn.TabIndex = 20;
             exitBtn.Text = "Exit Program";
             exitBtn.UseVisualStyleBackColor = true;
+            exitBtn.Click += exitBtn_Click;
             // 
             // myForm
             // 
