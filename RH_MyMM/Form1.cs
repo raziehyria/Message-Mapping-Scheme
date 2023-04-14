@@ -5,11 +5,29 @@ namespace RH_MyMM
         public myForm()
         {
             InitializeComponent();
-            fileInputBox.ReadOnly = true; // making input box read only
+            // making input, #msgs, #words, and #uwords boxes read only
+            fileInputBox.ReadOnly = true;
+            totmsgsTxtBox.ReadOnly = true;
+            totWordsTxtBox.ReadOnly = true;
+            numUnqWrdsTxtBox.ReadOnly = true;
+            fileInputBox.ForeColor = _defaultColor; // setting default placeholder text
+            fileInputBox.Font = _defaultFont;
 
         }
 
+        // setting default text font/color
+        private Font _defaultFont = new Font("Verd", 8, FontStyle.Italic);
+        private Color _defaultColor = Color.LightGray;
+        //checking if file selected
+        private bool _fileSelected = false;
+
+        // creating the global file opener object
+        private OpenFileDialog openFileDialog = new OpenFileDialog(); //creating a new openFile object instance
+
+        // creating global dictionary
         private Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>(); // for storing parsed lines
+
+        // creating global list
         private List<string> uniqueWords = new List<string>(); //list of unique words
         private void myForm_Load(object sender, EventArgs e)
         {
@@ -70,49 +88,58 @@ namespace RH_MyMM
         private void fileInputBox_Enter(object sender, EventArgs e)
         {
             //fileInputBox.Enabled = true;
+
         }
 
         private void fileInputBox_Leave(object sender, EventArgs e)
         {
-            //fileInputBox.Enabled = true;
+
         }
         // file input settings
         private void fileInputBox_TextChanged(object sender, EventArgs e)
         {
 
-        }
-        private void fileInputBox_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog(); //creating a new openFile object instance
-            openFileDialog1.Filter = "Text Files (*.txt)|*.txt"; //limiting to .txt files only
-
-            // if the user selects a valid file and hit "ok"
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (fileInputBox.Text != fileInputBox.PlaceholderText)
             {
-                // updated the words in the fileInputBox with the name and ext of the file chosen
-                string fileName = Path.GetFileName(openFileDialog1.FileName); // store name of file
-                fileInputBox.Text = fileName;
-                submitfileBtn.Enabled = true; // enable the submit button
+                fileInputBox.ForeColor = Color.SteelBlue;  // change text color
+                fileInputBox.Font = new Font("Verdana", 12f, FontStyle.Regular);
             }
             else
             {
+                // setting default placeholder text
+                fileInputBox.ForeColor = _defaultColor;
+                fileInputBox.Font = _defaultFont;
                 fileInputBox.Text = fileInputBox.PlaceholderText;
             }
-        }
 
-        // prompt system file input settings
-        private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        }
+        private void fileInputBox_Click(object sender, EventArgs e)
         {
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt"; //limiting to .txt files only
 
+            // if the user selects a valid file and hit "ok"
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // updated the words in the fileInputBox with the name and ext of the file chosen
+                string fileName = Path.GetFileName(openFileDialog.FileName); // store name of file
+                fileInputBox.Text = fileName;
+                _fileSelected = true; // updating file selected bool
+                submitfileBtn.Enabled = true; // enable the submit button
+            }
         }
-
+        // prompt system file input settings
         //submit button pressed
         private void submitfileBtn_Click(object sender, EventArgs e)
         {
-            // Show message to let user know file is being processed
-            MessageBox.Show("Processing file. Please wait...");
+            // reset placeholder
+            fileInputBox.Text = fileInputBox.PlaceholderText;
+            //reset file bool
+            _fileSelected = false;
 
-            // Disable submit button
+            // Show message to let user know file is being processed
+            //MessageBox.Show("Processing file. Please wait...");
+
+            // Disable submit button after click
             submitfileBtn.Enabled = !submitfileBtn.Enabled;
 
             int tot_msgs = 0; //total number of lines parsed
@@ -120,7 +147,7 @@ namespace RH_MyMM
 
 
             // Parse the selected file
-            string filePath = openFileDialog1.FileName;
+            string filePath = openFileDialog.FileName;
             string[] lines = File.ReadAllLines(filePath);
 
             // reset the dictionary
@@ -155,7 +182,7 @@ namespace RH_MyMM
                     }
                 }
 
-                MessageBox.Show("File processed successfully!");
+                //MessageBox.Show("File processed successfully!");
 
             }
         }

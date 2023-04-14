@@ -39,7 +39,6 @@
             submitMsgNumBox = new Button();
             msgNumList = new NumericUpDown();
             fileInputBox = new TextBox();
-            openFileDialog1 = new OpenFileDialog();
             totWordsTxtBox = new TextBox();
             totmsgsTxtBox = new TextBox();
             uniqWordFounLabel = new Label();
@@ -58,10 +57,10 @@
             // 
             listofUniqMsgBox.FormattingEnabled = true;
             listofUniqMsgBox.ItemHeight = 18;
-            listofUniqMsgBox.Location = new Point(682, 81);
+            listofUniqMsgBox.Location = new Point(706, 81);
             listofUniqMsgBox.Name = "listofUniqMsgBox";
             listofUniqMsgBox.SelectionMode = SelectionMode.None;
-            listofUniqMsgBox.Size = new Size(316, 418);
+            listofUniqMsgBox.Size = new Size(222, 418);
             listofUniqMsgBox.TabIndex = 0;
             listofUniqMsgBox.SelectedIndexChanged += listofUniqMsgBox_SelectedIndexChanged;
             // 
@@ -146,21 +145,19 @@
             // 
             // fileInputBox
             // 
-            fileInputBox.Location = new Point(12, 238);
+            fileInputBox.BackColor = SystemColors.ButtonFace;
+            fileInputBox.Location = new Point(11, 242);
+            fileInputBox.MaximumSize = new Size(185, 27);
+            fileInputBox.MinimumSize = new Size(185, 27);
             fileInputBox.Name = "fileInputBox";
             fileInputBox.PlaceholderText = "select your .txt file...";
+            fileInputBox.ReadOnly = true;
             fileInputBox.Size = new Size(185, 27);
             fileInputBox.TabIndex = 10;
             fileInputBox.Click += fileInputBox_Click;
             fileInputBox.TextChanged += fileInputBox_TextChanged;
             fileInputBox.Enter += fileInputBox_Enter;
             fileInputBox.Leave += fileInputBox_Leave;
-            // 
-            // openFileDialog1
-            // 
-            openFileDialog1.FileName = "openFileDialog1";
-            openFileDialog1.Filter = "Text Files (.txt)|.txt";
-            openFileDialog1.FileOk += openFileDialog1_FileOk;
             // 
             // totWordsTxtBox
             // 
@@ -183,7 +180,7 @@
             // uniqWordFounLabel
             // 
             uniqWordFounLabel.AutoSize = true;
-            uniqWordFounLabel.Location = new Point(760, 60);
+            uniqWordFounLabel.Location = new Point(719, 60);
             uniqWordFounLabel.Name = "uniqWordFounLabel";
             uniqWordFounLabel.Size = new Size(177, 18);
             uniqWordFounLabel.TabIndex = 13;
@@ -314,7 +311,6 @@
         private Button submitMsgNumBox;
         private NumericUpDown msgNumList;
         private TextBox fileInputBox;
-        private OpenFileDialog openFileDialog1;
         private TextBox totWordsTxtBox;
         private TextBox totmsgsTxtBox;
         private Label uniqWordFounLabel;
