@@ -18,17 +18,17 @@ namespace RH_MyMM
         // setting default text font/color
         private Font _defaultFont = new Font("Verd", 8, FontStyle.Italic);
         private Color _defaultColor = Color.LightGray;
-        //checking if file selected
-        private bool _fileSelected = false;
 
-        // creating the global file opener object
-        private OpenFileDialog openFileDialog = new OpenFileDialog(); //creating a new openFile object instance
 
-        // creating global dictionary
-        private Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>(); // for storing parsed lines
+        // creating the global file openFile object instance
+        private OpenFileDialog openFileDialog = new OpenFileDialog();
 
-        // creating global list
-        private List<string> uniqueWords = new List<string>(); //list of unique words
+        // creating global dictionary for storing parsed lines
+        private Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>();
+
+        // creating global unique words list
+        private List<string> uniqueWords = new List<string>();
+
         private void myForm_Load(object sender, EventArgs e)
         {
 
@@ -95,13 +95,14 @@ namespace RH_MyMM
         {
 
         }
+
         // file input settings
         private void fileInputBox_TextChanged(object sender, EventArgs e)
         {
 
             if (fileInputBox.Text != fileInputBox.PlaceholderText)
             {
-                fileInputBox.ForeColor = Color.SteelBlue;  // change text color
+                fileInputBox.ForeColor = Color.SteelBlue; // change text color
                 fileInputBox.Font = new Font("Verdana", 12f, FontStyle.Regular);
             }
             else
@@ -113,8 +114,10 @@ namespace RH_MyMM
             }
 
         }
+
         private void fileInputBox_Click(object sender, EventArgs e)
         {
+
             openFileDialog.Filter = "Text Files (*.txt)|*.txt"; //limiting to .txt files only
 
             // if the user selects a valid file and hit "ok"
@@ -123,68 +126,74 @@ namespace RH_MyMM
                 // updated the words in the fileInputBox with the name and ext of the file chosen
                 string fileName = Path.GetFileName(openFileDialog.FileName); // store name of file
                 fileInputBox.Text = fileName;
-                _fileSelected = true; // updating file selected bool
                 submitfileBtn.Enabled = true; // enable the submit button
             }
         }
-        // prompt system file input settings
+
         //submit button pressed
         private void submitfileBtn_Click(object sender, EventArgs e)
         {
-            // reset placeholder
-            fileInputBox.Text = fileInputBox.PlaceholderText;
-            //reset file bool
-            _fileSelected = false;
-
-            // Show message to let user know file is being processed
-            //MessageBox.Show("Processing file. Please wait...");
-
-            // Disable submit button after click
-            submitfileBtn.Enabled = !submitfileBtn.Enabled;
-
-            int tot_msgs = 0; //total number of lines parsed
-            int tot_words = 0; //total number of words in the dictionary
-
+            // declare variables
+            int tot_msgs = 0;
+            int tot_words = 0;
+            int tot_unique = uniqueWords.Count;
 
             // Parse the selected file
             string filePath = openFileDialog.FileName;
             string[] lines = File.ReadAllLines(filePath);
 
-            // reset the dictionary
+            // Disable submit button after click
+            submitfileBtn.Enabled = !submitfileBtn.Enabled;
+
+            // reset placeholder
+            fileInputBox.Text = fileInputBox.PlaceholderText;
+
+
+            // reset output fields
+            listofUniqMsgBox.Items.Clear();
+            uniqueWords.Clear();
             sentencesDict.Clear();
 
-            // Store each sentence as a list of words in the dictionary
-            if (File.Exists(filePath))
+            // Show message to let user know file is being processed
+            //MessageBox.Show("Processing file. Please wait...");
+
+            // read file and parse sentences
+            using (StreamReader sr = new StreamReader(filePath))
             {
-                using (StreamReader sr = new StreamReader(filePath))
+                string line;
+                Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>();
+                while ((line = sr.ReadLine()) != null)
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    List<string> words = line.Split(' ').ToList();
+
+                    // add unique words to list
+                    foreach (string word in words)
                     {
-                        //increment tot_msgs
-                        tot_msgs++;
-
-                        //parse sentence and store it in dictionary
-                        List<string> wordsList = line.Split(' ').ToList();
-                        sentencesDict.Add(tot_msgs - 1, wordsList);
-
-                        //increment tot_words
-                        tot_words += wordsList.Count;
-
-                        //add unique words to list
-                        foreach (string word in wordsList)
+                        if (!uniqueWords.Contains(word))
                         {
-                            if (!uniqueWords.Contains(word))
-                            {
-                                uniqueWords.Add(word);
-                            }
+                            uniqueWords.Add(word);
                         }
                     }
+
+                    // add sentence to dictionary
+                    sentencesDict.Add(tot_msgs, words);
+
+                    tot_msgs++;
+                    tot_words += words.Count;
                 }
 
+                // update UI with results
+                foreach (string word in uniqueWords)
+                {
+                    listofUniqMsgBox.Items.Add(word);
+                }
+
+                totmsgsTxtBox.Text = tot_msgs.ToString();
+                totWordsTxtBox.Text = tot_words.ToString();
+                numUnqWrdsTxtBox.Text = uniqueWords.Count.ToString();
+            }
                 //MessageBox.Show("File processed successfully!");
 
-            }
         }
 
         // list of numbers settings

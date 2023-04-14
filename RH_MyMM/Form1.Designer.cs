@@ -264,6 +264,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Window;
             ClientSize = new Size(1010, 595);
             Controls.Add(exitBtn);
             Controls.Add(numUnqWrdsTxtBox);
