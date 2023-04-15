@@ -1,6 +1,23 @@
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
+/* The code below will print the words Hello World
+*H
+* AUTHOR :   Razie Hyria        START DATE :    APRIL 13th 2023
+* FILENAME :        Message Mapping Scheme 
+* COURSE NAME:      CMPSC 472 Section 001: Operating Systems
+* SEMESTER:         SPRING 2023
+*
+* DESCRIPTION :
+*    A Windows Form App using C#, .NET, and Visual Studio to store text messages in an efficient method.  
+The goal is to not store the same word twice, from all of the messages
+*
+*
+* FUNCTIONS USED:  dictionary, lists, ToLower, ToUpper, StreamReader
+*
+* REF: https://www.geeksforgeeks.org/disk-scheduling-algorithms/
+*H
 
+to the screen, and it is amazing */
 namespace RH_MyMM
 {
     public partial class myForm : Form
@@ -169,7 +186,6 @@ namespace RH_MyMM
                     List<string> words = line.ToLower().Split(' ').ToList();
 
                     // store the index of the word in the uniqueWord list
-
                     List<int> indexes = new List<int>();
                     // add unique words to list
                     foreach (string word in words)
