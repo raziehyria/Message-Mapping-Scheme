@@ -134,6 +134,7 @@
             submitMsgNumBox.TabIndex = 8;
             submitMsgNumBox.Text = "Reassemble Message";
             submitMsgNumBox.UseVisualStyleBackColor = true;
+            submitMsgNumBox.Click += submitMsgNumBox_Click;
             // 
             // msgNumList
             // 

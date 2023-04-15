@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RH_MyMM
 {
     public partial class myForm : Form
@@ -24,7 +27,7 @@ namespace RH_MyMM
         private OpenFileDialog openFileDialog = new OpenFileDialog();
 
         // creating global dictionary for storing parsed lines
-        private Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>();
+        private Dictionary<int, List<int>> sentencesDict = new Dictionary<int, List<int>>();
 
         // creating global unique words list
         private List<string> uniqueWords = new List<string>();
@@ -134,20 +137,18 @@ namespace RH_MyMM
         private void submitfileBtn_Click(object sender, EventArgs e)
         {
             // declare variables
-            int tot_msgs = 0;
+            int tot_msgs = 1;
             int tot_words = 0;
             int tot_unique = uniqueWords.Count;
 
             // Parse the selected file
             string filePath = openFileDialog.FileName;
-            string[] lines = File.ReadAllLines(filePath);
 
             // Disable submit button after click
             submitfileBtn.Enabled = !submitfileBtn.Enabled;
 
             // reset placeholder
             fileInputBox.Text = fileInputBox.PlaceholderText;
-
 
             // reset output fields
             listofUniqMsgBox.Items.Clear();
@@ -160,39 +161,54 @@ namespace RH_MyMM
             // read file and parse sentences
             using (StreamReader sr = new StreamReader(filePath))
             {
+                //reads one line of text from the file and assigns it to the line variable.
                 string line;
-                Dictionary<int, List<string>> sentencesDict = new Dictionary<int, List<string>>();
-                while ((line = sr.ReadLine()) != null)
+                while ((line = sr.ReadLine()) != null) //as long as there is more text to read
                 {
-                    List<string> words = line.Split(' ').ToList();
+                    //splits the line string into separate words using the space character
+                    List<string> words = line.ToLower().Split(' ').ToList();
 
+                    // store the index of the word in the uniqueWord list
+
+                    List<int> indexes = new List<int>();
                     // add unique words to list
                     foreach (string word in words)
                     {
+                        //remove the punctuation marks from the end of words
+                        //string trimmedWord = word.TrimEnd('.', ',', '!', '?', ';', ':', '-', '—');
                         if (!uniqueWords.Contains(word))
                         {
+                            //add to unique words
                             uniqueWords.Add(word);
                         }
+                        // get the index from the unique word list
+                        int index = uniqueWords.IndexOf(word);
+                        indexes.Add(index);
                     }
+                    // add key and index to dictionary
+                    sentencesDict.Add(tot_msgs, indexes);
 
-                    // add sentence to dictionary
-                    sentencesDict.Add(tot_msgs, words);
-
+                    //update values
                     tot_msgs++;
                     tot_words += words.Count;
                 }
 
-                // update UI with results
+                // update listbox to display all uniqueWords
                 foreach (string word in uniqueWords)
                 {
                     listofUniqMsgBox.Items.Add(word);
                 }
 
-                totmsgsTxtBox.Text = tot_msgs.ToString();
+                //displaying info to all text boxes
+                int tt_msgs = tot_msgs - 1;
+                totmsgsTxtBox.Text = tt_msgs.ToString();
                 totWordsTxtBox.Text = tot_words.ToString();
                 numUnqWrdsTxtBox.Text = uniqueWords.Count.ToString();
+                msgNumList.Minimum = 1;
+                msgNumList.Maximum = tt_msgs;
+
             }
-                //MessageBox.Show("File processed successfully!");
+            //MessageBox.Show("File processed successfully!");
 
         }
 
@@ -232,7 +248,35 @@ namespace RH_MyMM
 
         private void exitBtn_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            // used to close app
+            System.Windows.Forms.Application.Exit();
+        }
+
+        private void submitMsgNumBox_Click(object sender, EventArgs e)
+        {
+            // get the value from the up-down down control
+            int msgNum = (int)msgNumList.Value;
+
+            // check to make sure its a key in the dictionary
+            if (sentencesDict.ContainsKey(msgNum))
+            {
+                // retrieve the list of indexes
+                string ressembledMsg = "";
+                //iterate over each index, retrieve the corresponding word from the uniqueWords list,
+                foreach (int index in sentencesDict[msgNum])
+                {
+                    //capitalizing the first word of each sentence
+                    string word = uniqueWords[index];
+                    if (index == sentencesDict[msgNum][0])
+                    {
+                        word = char.ToUpper(word[0]) + word.Substring(1);
+                    }
+                    //append it to the ressembledMsg string
+                    ressembledMsg += word + " ";
+                }
+                // trim any whitespace, and set the ressembledMsgOutput box to the message
+                ressembledMsgOutput.Text = ressembledMsg.Trim();
+            }
         }
     }
 }
