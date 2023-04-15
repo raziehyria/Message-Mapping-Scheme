@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
-/* The code below will print the words Hello World
+/******** 
 *H
 * AUTHOR :   Razie Hyria        START DATE :    APRIL 13th 2023
 * FILENAME :        Message Mapping Scheme 
@@ -16,8 +16,7 @@ The goal is to not store the same word twice, from all of the messages
 *
 *
 *H
-
-to the screen, and it is amazing */
+********/
 namespace RH_MyMM
 {
     public partial class myForm : Form
