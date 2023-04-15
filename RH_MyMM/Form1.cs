@@ -14,7 +14,7 @@ The goal is to not store the same word twice, from all of the messages
 *
 * FUNCTIONS USED:  dictionary, lists, ToLower, ToUpper, StreamReader
 *
-* REF: https://www.geeksforgeeks.org/disk-scheduling-algorithms/
+*
 *H
 
 to the screen, and it is amazing */
